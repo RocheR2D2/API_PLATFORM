@@ -22,6 +22,7 @@ class AirportFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
+
         // TODO: Implement load() method.
         $dat = fopen(dirname(__FILE__).'/Data/airport.dat', 'r');
 
@@ -42,5 +43,6 @@ class AirportFixtures extends Fixture
 
 
         $manager->flush();
+
     }
 }
