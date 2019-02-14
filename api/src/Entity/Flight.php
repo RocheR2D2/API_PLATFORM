@@ -26,7 +26,22 @@ class Flight
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $dduration;
+    private $duration;
+
+    /**
+     * @var crew members of the flight
+     * @ORM\ManyToMany(targetEntity="App\Entity\Crew", inversedBy="flights")
+     * @ORM\JoinColumn(name="flights", referencedColumnName="id")
+     */
+    public $crewMembers;
+
+    /**
+     * @var Airport arrival of the flight
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Airport", inversedBy="flights_arrival")
+     * @ORM\JoinColumn(name="flights_arrival", referencedColumnName="id")
+     */
+    public $airportArrival;
 
     public function getId(): ?int
     {
@@ -45,14 +60,14 @@ class Flight
         return $this;
     }
 
-    public function getDduration(): ?string
+    public function getDuration(): ?string
     {
-        return $this->dduration;
+        return $this->duration;
     }
 
-    public function setDduration(?string $dduration): self
+    public function setDuration(?string $dduration): self
     {
-        $this->dduration = $dduration;
+        $this->duration = $dduration;
 
         return $this;
     }

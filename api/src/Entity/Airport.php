@@ -28,6 +28,18 @@ class Airport
      */
     private $country;
 
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Flight", mappedBy="airportArrival")
+     */
+    public $flights;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Terminal", mappedBy="Terminal")
+     */
+    public $terminals;
+
     public function getId(): ?int
     {
         return $this->id;

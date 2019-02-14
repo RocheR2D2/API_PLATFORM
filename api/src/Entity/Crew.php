@@ -38,6 +38,13 @@ class Crew
      */
     private $birthday;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection|Flight[]
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\Flight", mappedBy="crewMembers")
+     */
+    public $flights_arrival;
+
     public function getId(): ?int
     {
         return $this->id;

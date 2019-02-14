@@ -23,6 +23,20 @@ class Gate
      */
     private $name;
 
+    /**
+     * @var Airport arrival of the flight
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Terminal", inversedBy="gates")
+     * @ORM\JoinColumn(name="gates", referencedColumnName="id")
+     */
+    public $terminal;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Flight", mappedBy="airportArrival")
+     */
+    public $flights;
+
     public function getId(): ?int
     {
         return $this->id;
