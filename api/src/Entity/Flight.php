@@ -43,8 +43,8 @@ class Flight
     /**
      * @var Airport arrival of the flight
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Airport", inversedBy="flights_arrival")
-     * @ORM\JoinColumn(name="flights_arrival", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Airport", inversedBy="flights")
+     * @ORM\JoinColumn(name="flights", referencedColumnName="id")
      */
     public $airportArrival;
 
@@ -67,7 +67,7 @@ class Flight
 
     /**
      * @ManyToOne(targetEntity="Gate", inversedBy="flights")
-     * @JoinColumn(name="gate_id", referencedColumnName="id")
+     * @JoinColumn(name="flights", referencedColumnName="id")
      */
     private $gate;
 

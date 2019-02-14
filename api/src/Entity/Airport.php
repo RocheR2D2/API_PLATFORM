@@ -36,7 +36,7 @@ class Airport
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Terminal", mappedBy="Terminal")
+     * @ORM\OneToMany(targetEntity="App\Entity\Terminal", mappedBy="airport")
      */
     public $terminals;
 
