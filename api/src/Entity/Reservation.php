@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
-
+use Doctrine\ORM\Mapping\ManyToOne;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\ReservationRepository")
@@ -27,6 +27,12 @@ class Reservation
      * @ORM\Column(type="datetime")
      */
     private $reservation_date;
+
+    /**
+     * @ManyToOne(targetEntity="User", inversedBy="reservations")
+     * @JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
 
     public function getId(): ?int
     {
