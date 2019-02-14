@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\ReservationRepository")
@@ -59,6 +60,18 @@ class Reservation
     public function setReservationDate(\DateTimeInterface $reservation_date): self
     {
         $this->reservation_date = $reservation_date;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
