@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * @ApiResource()
@@ -27,6 +29,12 @@ class Flight
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $dduration;
+
+    /**
+     * @ManyToOne(targetEntity="Company", inversedBy="flights")
+     * @JoinColumn(name="company_id", referencedColumnName="id")
+     */
+    private $company;
 
     public function getId(): ?int
     {
@@ -53,6 +61,18 @@ class Flight
     public function setDduration(?string $dduration): self
     {
         $this->dduration = $dduration;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): self
+    {
+        $this->company = $company;
 
         return $this;
     }
