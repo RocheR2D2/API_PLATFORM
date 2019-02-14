@@ -26,7 +26,16 @@ class Gate
     private $name;
 
     /**
-     * @OneToMany(targetEntity="Flight", mappedBy="gate")
+     * @var Airport arrival of the flight
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Terminal", inversedBy="gates")
+     * @ORM\JoinColumn(name="gates", referencedColumnName="id")
+     */
+    public $terminal;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Flight", mappedBy="airportArrival")
      */
     private $flights;
 
