@@ -4,6 +4,10 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 
 /**
  * @ApiResource()
@@ -26,7 +30,31 @@ class Flight
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $dduration;
+    private $duration;
+
+    /**
+     * @ManyToOne(targetEntity="Company", inversedBy="flights")
+     * @JoinColumn(name="company_id", referencedColumnName="id")
+     */
+    private $company;
+
+    /**
+     * @OneToOne(targetEntity="Reservation", inversedBy="flight")
+     */
+    private $reservation;
+
+    /**
+     * @ManyToOne(targetEntity="Plane", inversedBy="flights")
+     * @JoinColumn(name="plane_id", referencedColumnName="id")
+     */
+    private $plane;
+
+    /**
+     * @ManyToOne(targetEntity="Gate", inversedBy="flights")
+     * @JoinColumn(name="gate_id", referencedColumnName="id")
+     */
+    private $gate;
+
 
     public function getId(): ?int
     {
@@ -45,14 +73,62 @@ class Flight
         return $this;
     }
 
-    public function getDduration(): ?string
+    public function getDuration(): ?string
     {
-        return $this->dduration;
+        return $this->duration;
     }
 
-    public function setDduration(?string $dduration): self
+    public function setDuration(?string $duration): self
     {
-        $this->dduration = $dduration;
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): self
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    public function getReservation(): ?Reservation
+    {
+        return $this->reservation;
+    }
+
+    public function setReservation(?Reservation $reservation): self
+    {
+        $this->reservation = $reservation;
+
+        return $this;
+    }
+
+    public function getPlane(): ?Plane
+    {
+        return $this->plane;
+    }
+
+    public function setPlane(?Plane $plane): self
+    {
+        $this->plane = $plane;
+
+        return $this;
+    }
+
+    public function getGate(): ?Gate
+    {
+        return $this->gate;
+    }
+
+    public function setGate(?Gate $gate): self
+    {
+        $this->gate = $gate;
 
         return $this;
     }

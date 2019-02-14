@@ -3,9 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\ReservationRepository")
@@ -34,6 +38,24 @@ class Reservation
      * @JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
+
+    /**
+     * One reservation has One flight.
+     *
+     * @OneToOne(targetEntity="Flight", mappedBy="reservation")
+     * @JoinColumn(name="flight_id", referencedColumnName="id")
+     */
+    private $flight;
+
+    /**
+     * @OneToMany(targetEntity="Bagage", mappedBy="reservation")
+     */
+    private $bagages;
+
+    public function __construct()
+    {
+        $this->bagages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -72,6 +94,49 @@ class Reservation
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getFlight(): ?Flight
+    {
+        return $this->flight;
+    }
+
+    public function setFlight(?Flight $flight): self
+    {
+        $this->flight = $flight;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Bagage[]
+     */
+    public function getBagages(): Collection
+    {
+        return $this->bagages;
+    }
+
+    public function addBagage(Bagage $bagage): self
+    {
+        if (!$this->bagages->contains($bagage)) {
+            $this->bagages[] = $bagage;
+            $bagage->setReservation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBagage(Bagage $bagage): self
+    {
+        if ($this->bagages->contains($bagage)) {
+            $this->bagages->removeElement($bagage);
+            // set the owning side to null (unless already changed)
+            if ($bagage->getReservation() === $this) {
+                $bagage->setReservation(null);
+            }
+        }
 
         return $this;
     }
