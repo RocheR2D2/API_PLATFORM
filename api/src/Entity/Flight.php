@@ -49,6 +49,12 @@ class Flight
      */
     private $plane;
 
+    /**
+     * @ManyToOne(targetEntity="Gate", inversedBy="flights")
+     * @JoinColumn(name="gate_id", referencedColumnName="id")
+     */
+    private $gate;
+
 
     public function getId(): ?int
     {
@@ -111,6 +117,18 @@ class Flight
     public function setPlane(?Plane $plane): self
     {
         $this->plane = $plane;
+
+        return $this;
+    }
+
+    public function getGate(): ?Gate
+    {
+        return $this->gate;
+    }
+
+    public function setGate(?Gate $gate): self
+    {
+        $this->gate = $gate;
 
         return $this;
     }
