@@ -33,6 +33,22 @@ class Flight
     private $duration;
 
     /**
+
+     * @var crew members of the flight
+     * @ORM\ManyToMany(targetEntity="App\Entity\Crew", inversedBy="flights")
+     * @ORM\JoinColumn(name="flights", referencedColumnName="id")
+     */
+    public $crewMembers;
+
+    /**
+     * @var Airport arrival of the flight
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Airport", inversedBy="flights_arrival")
+     * @ORM\JoinColumn(name="flights_arrival", referencedColumnName="id")
+     */
+    public $airportArrival;
+
+    /**
      * @ManyToOne(targetEntity="Company", inversedBy="flights")
      * @JoinColumn(name="company_id", referencedColumnName="id")
      */
@@ -54,7 +70,6 @@ class Flight
      * @JoinColumn(name="gate_id", referencedColumnName="id")
      */
     private $gate;
-
 
     public function getId(): ?int
     {
