@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Doctrine\ORM\Mapping\OneToMany;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\GateRepository")
@@ -35,7 +37,12 @@ class Gate
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Flight", mappedBy="airportArrival")
      */
-    public $flights;
+    private $flights;
+
+    public function __construct()
+    {
+        $this->flights = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -50,6 +57,37 @@ class Gate
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Flight[]
+     */
+    public function getFlights(): Collection
+    {
+        return $this->flights;
+    }
+
+    public function addFlight(Flight $flight): self
+    {
+        if (!$this->flights->contains($flight)) {
+            $this->flights[] = $flight;
+            $flight->setGate($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFlight(Flight $flight): self
+    {
+        if ($this->flights->contains($flight)) {
+            $this->flights->removeElement($flight);
+            // set the owning side to null (unless already changed)
+            if ($flight->getGate() === $this) {
+                $flight->setGate(null);
+            }
+        }
 
         return $this;
     }
