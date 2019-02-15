@@ -42,6 +42,11 @@ class Airport
      * @ORM\Column(type="string", length=255)
      * @Groups({"read_airport", "write_airport"})
      */
+    private $city;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $country;
 
     /**
@@ -73,6 +78,22 @@ class Airport
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param mixed $city
+     */
+    public function setCity($city): void
+    {
+        $this->city = $city;
     }
 
     public function getCountry(): ?string
