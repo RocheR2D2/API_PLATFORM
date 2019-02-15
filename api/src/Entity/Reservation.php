@@ -10,8 +10,21 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *         "get",
+ *         "post"={"validation_groups"={"Default", "postValidation"}}
+ *     },
+ *     itemOperations={
+ *         "delete",
+ *         "get",
+ *         "put"={"validation_groups"={"Default", "putValidation"}}
+ *     },
+ *     normalizationContext={"groups"={"read_reservation"}},
+ *     denormalizationContext={"groups"={"write_reservation"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\ReservationRepository")
  */
 class Reservation
@@ -25,11 +38,13 @@ class Reservation
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"read_reservation", "write_reservation"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"read_reservation", "write_reservation", "read_user"})
      */
     private $reservation_date;
 
@@ -42,13 +57,15 @@ class Reservation
     /**
      * One reservation has One flight.
      *
-     * @OneToOne(targetEntity="Flight", mappedBy="reservation")
+     * @ManyToOne(targetEntity="Flight", inversedBy="reservation")
      * @JoinColumn(name="flight_id", referencedColumnName="id")
+     * @Groups({"read_reservation", "write_reservation"})
      */
     private $flight;
 
     /**
      * @OneToMany(targetEntity="Bagage", mappedBy="reservation")
+     * @Groups({"read_reservation", "write_reservation"})
      */
     private $bagages;
 

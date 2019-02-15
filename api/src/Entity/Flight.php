@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -24,16 +25,17 @@ class Flight
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read_flight", "write_flight"})
      */
     private $registrationNumber;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"read_flight", "write_flight"})
      */
     private $duration;
 
     /**
-
      * @var crew members of the flight
      * @ORM\ManyToMany(targetEntity="App\Entity\Crew", inversedBy="flights")
      * @ORM\JoinColumn(name="flights", referencedColumnName="id")
@@ -45,23 +47,26 @@ class Flight
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Airport", inversedBy="flights")
      * @ORM\JoinColumn(name="flights", referencedColumnName="id")
+     * @Groups({"read_flight", "write_flight"})
      */
     public $airportArrival;
 
     /**
      * @ManyToOne(targetEntity="Company", inversedBy="flights")
      * @JoinColumn(name="company_id", referencedColumnName="id")
+     * @Groups({"read_flight", "write_flight"})
      */
     private $company;
 
     /**
-     * @OneToOne(targetEntity="Reservation", inversedBy="flight")
+     * @OneToMany(targetEntity="Reservation", inversedBy="flight")
      */
     private $reservation;
 
     /**
      * @ManyToOne(targetEntity="Plane", inversedBy="flights")
-     * @JoinColumn(name="plane_id", referencedColumnName="id")
+     * @JoinColumn(name="plane_id", referencedColumnName="id")Groups({"read_flight
+     *
      */
     private $plane;
 
