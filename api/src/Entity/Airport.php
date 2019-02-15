@@ -59,7 +59,7 @@ class Airport
     /**
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Terminal", mappedBy="airport")
-     * @Groups({"read_airport"})
+     * @Groups({"read_airport", "write_airport"})
      */
     public $terminals;
 

@@ -44,7 +44,7 @@ class Reservation
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"read_reservation", "write_reservation", "read_user"})
+     * @Groups({"read_reservation", "write_reservation", "read_user", "read_bagage"})
      */
     private $reservation_date;
 
