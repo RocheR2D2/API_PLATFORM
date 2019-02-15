@@ -8,14 +8,22 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping\OneToMany;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
+
+ *     collectionOperations={
+ *         "get",
+ *         "post"={"validation_groups"={"Default", "postValidation"}}
+ *     },
  *     itemOperations={
- *          "get"={
- *              "access_control"="is_granted()"
- *          }
- *     }
+ *         "delete",
+ *         "get",
+ *         "put"={"validation_groups"={"Default", "putValidation"}}
+ *     },
+ *     normalizationContext={"groups"={"read_user"}},
+ *     denormalizationContext={"groups"={"write_user"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="user_account")
@@ -31,38 +39,45 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read_user", "write_user"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read_user", "write_user"})
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read_user", "write_user", "read_reservation"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read_user", "write_user", "read_reservation"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"read_user", "write_user"})
      */
     private $birthday;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read_user", "write_user"})
      */
     private $id_number;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="boolean")
+     * @Groups({"read_user", "write_user"})
      */
-    private $boolean;
+    private $sex;
 
     /**
      * @ORM\Column(type="array")
@@ -75,12 +90,13 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
-     *
+     * @Groups({"write_user"})
      */
     private $plainPassword;
 
     /**
      * @OneToMany(targetEntity="Reservation", mappedBy="user")
+     * @Groups({"read_user"})
      */
     private $reservations;
 
@@ -166,14 +182,14 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getBoolean(): ?string
+    public function getSex(): ?string
     {
-        return $this->boolean;
+        return $this->sex;
     }
 
-    public function setBoolean(string $boolean): self
+    public function setSex(string $sex): self
     {
-        $this->boolean = $boolean;
+        $this->sex = $sex;
 
         return $this;
     }

@@ -35,7 +35,7 @@ class Gate
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Flight", mappedBy="airportArrival")
+     * @ORM\OneToMany(targetEntity="App\Entity\Flight", mappedBy="gate")
      */
     private $flights;
 
