@@ -65,7 +65,7 @@ class Flight
     /**
      * @OneToMany(targetEntity="Reservation", mappedBy="flight")
      */
-    private $reservation;
+    private $reservations;
 
     /**
      * @ManyToOne(targetEntity="Plane", inversedBy="flights")
@@ -126,14 +126,33 @@ class Flight
         return $this;
     }
 
-    public function getReservation(): ?Reservation
+    /**
+     * @return Collection|Reservation[]
+     */
+    public function getReservations(): Collection
     {
-        return $this->reservation;
+        return $this->reservations;
     }
 
-    public function setReservation(?Reservation $reservation): self
+    public function addReservation(Reservation $reservation): self
     {
-        $this->reservation = $reservation;
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setFlight($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->contains($reservation)) {
+            $this->reservations->removeElement($reservation);
+            // set the owning side to null (unless already changed)
+            if ($reservation->getFlight() === $this) {
+                $reservation->setFlight(null);
+            }
+        }
 
         return $this;
     }
