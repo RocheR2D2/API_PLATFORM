@@ -7,8 +7,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OneToMany;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *         "get",
+ *         "post"={"validation_groups"={"Default", "postValidation"}}
+ *     },
+ *     itemOperations={
+ *         "delete",
+ *         "get",
+ *         "put"={"validation_groups"={"Default", "putValidation"}}
+ *     },
+ *     normalizationContext={"groups"={"read_gate"}},
+ *     denormalizationContext={"groups"={"write_gate"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\GateRepository")
  */
 class Gate
@@ -22,6 +36,7 @@ class Gate
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read_gate", "write_gate"})
      */
     private $name;
 
@@ -30,12 +45,13 @@ class Gate
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Terminal", inversedBy="gates")
      * @ORM\JoinColumn(name="gates", referencedColumnName="id")
+     * @Groups({"read_gate"})
      */
     public $terminal;
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Flight", mappedBy="airportArrival")
+     * @ORM\OneToMany(targetEntity="App\Entity\Flight", mappedBy="gate")
      */
     private $flights;
 

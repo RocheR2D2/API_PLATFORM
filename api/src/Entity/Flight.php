@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping\JoinTable;
 
 /**
@@ -27,18 +28,19 @@ class Flight
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read_flight", "write_flight"})
      */
     private $registrationNumber;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"read_flight", "write_flight"})
      */
     private $duration;
 
     /**
-
      * @var crew members of the flight
-     * @ORM\ManyToMany(targetEntity="App\Entity\Crew", inversedBy="flights_arrival")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Crew", inversedBy="flights")
      * @ORM\JoinTable(name="flight_crew")
      */
     public $crewMembers;
@@ -47,38 +49,42 @@ class Flight
     /**
      * @var Airport arrival of the flight
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Airport", inversedBy="flights_arrival")
-     * @ORM\JoinColumn(name="flights_arrival", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Airport", inversedBy="flights")
+     * @ORM\JoinColumn(name="flights", referencedColumnName="id")
+     * @Groups({"read_flight", "write_flight"})
      */
     public $airportArrival;
 
     /**
      * @ManyToOne(targetEntity="Company", inversedBy="flights")
      * @JoinColumn(name="company_id", referencedColumnName="id")
+     * @Groups({"read_flight", "write_flight"})
      */
     private $company;
 
     /**
      * @OneToMany(targetEntity="Reservation", mappedBy="flight")
      */
-    private $reservations;
+    private $reservation;
 
     /**
      * @ManyToOne(targetEntity="Plane", inversedBy="flights")
      * @JoinColumn(name="plane_id", referencedColumnName="id")
+     * @Groups({"read_flight"})
+     *
      */
     private $plane;
 
     /**
      * @ManyToOne(targetEntity="Gate", inversedBy="flights")
-     * @JoinColumn(name="gate_id", referencedColumnName="id")
+     * @JoinColumn(name="flights", referencedColumnName="id")
+     * @Groups({"read_flight"})
      */
     private $gate;
 
     public function __construct()
     {
         $this->crewMembers = new ArrayCollection();
-        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -118,6 +124,18 @@ class Flight
     public function setCompany(?Company $company): self
     {
         $this->company = $company;
+
+        return $this;
+    }
+
+    public function getReservation(): ?Reservation
+    {
+        return $this->reservation;
+    }
+
+    public function setReservation(?Reservation $reservation): self
+    {
+        $this->reservation = $reservation;
 
         return $this;
     }
@@ -180,37 +198,6 @@ class Flight
     public function setAirportArrival(?Airport $airportArrival): self
     {
         $this->airportArrival = $airportArrival;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Reservation[]
-     */
-    public function getReservations(): Collection
-    {
-        return $this->reservations;
-    }
-
-    public function addReservation(Reservation $reservation): self
-    {
-        if (!$this->reservations->contains($reservation)) {
-            $this->reservations[] = $reservation;
-            $reservation->setFlight($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReservation(Reservation $reservation): self
-    {
-        if ($this->reservations->contains($reservation)) {
-            $this->reservations->removeElement($reservation);
-            // set the owning side to null (unless already changed)
-            if ($reservation->getFlight() === $this) {
-                $reservation->setFlight(null);
-            }
-        }
 
         return $this;
     }

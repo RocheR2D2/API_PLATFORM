@@ -45,7 +45,7 @@ class Crew
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Flight", mappedBy="crewMembers")
      */
-    public $flights_arrival;
+    public $flights;
 
     public function __construct()
     {

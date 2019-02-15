@@ -6,9 +6,22 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *         "get",
+ *         "post"={"validation_groups"={"Default", "postValidation"}}
+ *     },
+ *     itemOperations={
+ *         "delete",
+ *         "get",
+ *         "put"={"validation_groups"={"Default", "putValidation"}}
+ *     },
+ *     normalizationContext={"groups"={"read_terminal"}},
+ *     denormalizationContext={"groups"={"write_terminal"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\TerminalRepository")
  */
 class Terminal
@@ -22,6 +35,7 @@ class Terminal
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read_terminal", "write_terminal", "read_gate"})
      */
     private $name;
 
@@ -30,12 +44,14 @@ class Terminal
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Airport", inversedBy="terminals")
      * @ORM\JoinColumn(name="terminals", referencedColumnName="id")
+     * @Groups({"read_terminal", "write_terminal"})
      */
     public $airport;
 
     /**
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Gate", mappedBy="terminal")
+     * @Groups({"read_terminal", "write_terminal"})
      */
     public $gates;
 
