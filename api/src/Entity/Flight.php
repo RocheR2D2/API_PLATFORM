@@ -3,11 +3,14 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\JoinTable;
 
 /**
  * @ApiResource()
@@ -35,10 +38,11 @@ class Flight
     /**
 
      * @var crew members of the flight
-     * @ORM\ManyToMany(targetEntity="App\Entity\Crew", inversedBy="flights")
-     * @ORM\JoinColumn(name="flights", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Crew", inversedBy="flights_arrival")
+     * @ORM\JoinTable(name="flight_crew")
      */
     public $crewMembers;
+
 
     /**
      * @var Airport arrival of the flight
@@ -70,6 +74,11 @@ class Flight
      * @JoinColumn(name="flights", referencedColumnName="id")
      */
     private $gate;
+
+    public function __construct()
+    {
+        $this->crewMembers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -144,6 +153,44 @@ class Flight
     public function setGate(?Gate $gate): self
     {
         $this->gate = $gate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Crew[]
+     */
+    public function getCrewMembers(): Collection
+    {
+        return $this->crewMembers;
+    }
+
+    public function addCrewMember(Crew $crewMember): self
+    {
+        if (!$this->crewMembers->contains($crewMember)) {
+            $this->crewMembers[] = $crewMember;
+        }
+
+        return $this;
+    }
+
+    public function removeCrewMember(Crew $crewMember): self
+    {
+        if ($this->crewMembers->contains($crewMember)) {
+            $this->crewMembers->removeElement($crewMember);
+        }
+
+        return $this;
+    }
+
+    public function getAirportArrival(): ?Airport
+    {
+        return $this->airportArrival;
+    }
+
+    public function setAirportArrival(?Airport $airportArrival): self
+    {
+        $this->airportArrival = $airportArrival;
 
         return $this;
     }

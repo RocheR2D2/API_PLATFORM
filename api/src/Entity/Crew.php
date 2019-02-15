@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -44,6 +46,11 @@ class Crew
      * @ORM\ManyToMany(targetEntity="App\Entity\Flight", mappedBy="crewMembers")
      */
     public $flights;
+
+    public function __construct()
+    {
+        $this->flights_arrival = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -94,6 +101,34 @@ class Crew
     public function setBirthday(\DateTimeInterface $birthday): self
     {
         $this->birthday = $birthday;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Flight[]
+     */
+    public function getFlightsArrival(): Collection
+    {
+        return $this->flights_arrival;
+    }
+
+    public function addFlightsArrival(Flight $flightsArrival): self
+    {
+        if (!$this->flights_arrival->contains($flightsArrival)) {
+            $this->flights_arrival[] = $flightsArrival;
+            $flightsArrival->addCrewMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFlightsArrival(Flight $flightsArrival): self
+    {
+        if ($this->flights_arrival->contains($flightsArrival)) {
+            $this->flights_arrival->removeElement($flightsArrival);
+            $flightsArrival->removeCrewMember($this);
+        }
 
         return $this;
     }
