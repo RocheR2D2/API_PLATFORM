@@ -57,7 +57,7 @@ class Reservation
     /**
      * One reservation has One flight.
      *
-     * @ManyToOne(targetEntity="Flight", inversedBy="reservation")
+     * @ManyToOne(targetEntity="Flight", inversedBy="reservations")
      * @JoinColumn(name="flight_id", referencedColumnName="id")
      * @Groups({"read_reservation", "write_reservation"})
      */
