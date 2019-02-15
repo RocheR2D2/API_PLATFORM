@@ -40,7 +40,7 @@ class Flight
 
     /**
      * @var crew members of the flight
-     * @ORM\ManyToMany(targetEntity="App\Entity\Crew", inversedBy="flights_arrival")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Crew", inversedBy="flights")
      * @ORM\JoinTable(name="flight_crew")
      */
     public $crewMembers;
@@ -63,7 +63,7 @@ class Flight
     private $company;
 
     /**
-     * @OneToMany(targetEntity="Reservation", inversedBy="flight")
+     * @OneToMany(targetEntity="Reservation", mappedBy="flight")
      */
     private $reservation;
 
