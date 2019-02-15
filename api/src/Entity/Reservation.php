@@ -115,18 +115,6 @@ class Reservation
         return $this;
     }
 
-    public function getFlight(): ?Flight
-    {
-        return $this->flight;
-    }
-
-    public function setFlight(?Flight $flight): self
-    {
-        $this->flight = $flight;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Bagage[]
      */
@@ -154,6 +142,18 @@ class Reservation
                 $bagage->setReservation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFlight(): ?Flight
+    {
+        return $this->flight;
+    }
+
+    public function setFlight(?Flight $flight): self
+    {
+        $this->flight = $flight;
 
         return $this;
     }

@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
+
  *     collectionOperations={
  *         "get",
  *         "post"={"validation_groups"={"Default", "postValidation"}}
@@ -81,7 +82,7 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\Column(type="array")
      */
-    private $roles = [];
+    private $roles = ['ROLE_USER'];
 
     /**
      * @ORM\Column(type="string", length=255)
