@@ -12,8 +12,10 @@ use App\Entity\Gate;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Faker;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class GateFixtures extends Fixture
+
+class GateFixtures extends Fixture implements DependentFixtureInterface
 {
 
     /**
@@ -32,5 +34,11 @@ class GateFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies(){
+        return array(
+            TerminalFixtures::class
+        );
     }
 }

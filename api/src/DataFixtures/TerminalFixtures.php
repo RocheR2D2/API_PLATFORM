@@ -13,8 +13,9 @@ use App\Entity\Terminal;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Faker;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class TerminalFixtures extends Fixture
+class TerminalFixtures extends Fixture implements DependentFixtureInterface
 {
 
     /**

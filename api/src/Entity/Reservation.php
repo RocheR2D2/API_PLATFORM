@@ -65,7 +65,7 @@ class Reservation
 
     /**
      * @OneToMany(targetEntity="Bagage", mappedBy="reservation")
-     * @Groups({"read_reservation", "write_reservation"})
+     * @Groups({"read_reservation"})
      */
     private $bagages;
 
